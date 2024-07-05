@@ -1,3 +1,6 @@
+const findElement = (element) => document.querySelector(element);
+const findAllElements = (elements) => document.querySelectorAll(elements);
+
 // возвращает рандомное число из диапазона
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -15,4 +18,4 @@ const createId = () => {
   return () => id++;
 };
 
-export {getRandomInteger, getRandomArrayElement, createId};
+export {getRandomInteger, getRandomArrayElement, createId, findElement, findAllElements};

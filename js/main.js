@@ -1,3 +1,3 @@
-import {randomCard} from './data.js';
+import {createPost} from './picture.js';
 
-randomCard();
+createPost();
