@@ -42,25 +42,38 @@ const MIN_LIKES_VALUE = 15;
 const MAX_LIKES_VALUE = 200;
 const MIN_AVATAR_VALUE = 1;
 const MAX_AVATAR_VALUE = 6;
+const MIN_COMMENTS_VALUE = 0;
+const MAX_COMMENTS_VALUE = 30;
+const MIN_COMMENT_SENTENCE = 1;
+const MAX_COMMENT_SENTENCE = 2;
 
 
 const getRandomNumberOfLikes = () => getRandomInteger(MIN_LIKES_VALUE, MAX_LIKES_VALUE);
 const getRandomNumberOfAvatar = () => getRandomInteger(MIN_AVATAR_VALUE, MAX_AVATAR_VALUE);
+const getRandomNumberOfSentence = () => getRandomInteger(MIN_COMMENT_SENTENCE, MAX_COMMENT_SENTENCE);
+const getRandomNumberOfcomments = () => getRandomInteger(MIN_COMMENTS_VALUE, MAX_COMMENTS_VALUE);
 
 
 const postId = createId();
 const commentId = createId();
 const photoId = createId();
 
-//создает комемнтарий
+//создает текст сообщения
+const createMessage = () => {
+  const sentenceCount = getRandomNumberOfSentence();
+  const messages = Array.from({length: sentenceCount}, () =>
+    getRandomArrayElement(COMMENTS));
+  const message = messages.join(' ');
+  return message;
+};
+
+//создает комментарий
 const createComment = () => ({
   id: commentId(),
   avatar: `img/avatar-'${getRandomNumberOfAvatar()}.svg`,
-  message: getRandomArrayElement(COMMENTS),
+  message: createMessage(),
   name: getRandomArrayElement(USER_NAMES)
 });
-
-const newComment = Array.from({length: MAX_LENGTH_VALUE}, createComment);
 
 //создает пост
 const createPhotoElement = () => ({
@@ -68,9 +81,9 @@ const createPhotoElement = () => ({
   url: `photos/${photoId()}.jpg`,
   description: getRandomArrayElement(DESCRIPTION),
   likes: getRandomNumberOfLikes(),
-  comments: getRandomArrayElement(newComment),
+  comments: Array.from({length: getRandomNumberOfcomments()}, createComment),
 });
 
-const randomCard = Array.from({length: MAX_LENGTH_VALUE}, createPhotoElement);
+const randomCard = () => Array.from({length: MAX_LENGTH_VALUE}, createPhotoElement);
 
 export {randomCard};
