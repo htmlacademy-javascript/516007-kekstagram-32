@@ -1,4 +1,5 @@
 import {findElement} from './util.js';
+import {resetEffects} from './effect.js';
 
 const uploadFile = findElement('.img-upload__input');
 const overlay = findElement('.img-upload__overlay');
@@ -25,6 +26,7 @@ const showModal = () => {
 
 const hideModal = () => {
   form.reset();
+  resetEffects();
   pristine.reset();
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
