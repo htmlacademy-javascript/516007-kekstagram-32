@@ -1,3 +1,4 @@
+// поиск элементов на странице
 const findElement = (element) => document.querySelector(element);
 const findAllElements = (elements) => document.querySelectorAll(elements);
 
