@@ -1,5 +1,6 @@
-import {findElement} from './util.js';
+import {findElement, showAlert} from './util.js';
 import {resetEffects} from './effect.js';
+import {sendData} from './api.js';
 
 const uploadFile = findElement('.img-upload__input');
 const overlay = findElement('.img-upload__overlay');
@@ -8,9 +9,15 @@ const form = findElement('.img-upload__form');
 const cancelButton = findElement('.img-upload__cancel');
 const hashtagField = findElement('.text__hashtags');
 const commentField = findElement('.text__description');
+const submitButton = findElement('.img-upload__submit');
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
+
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -65,12 +72,33 @@ pristine.addValidator(
   'Неправильно заполнены хэштеги',
 );
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
 };
 
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const onFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch((err) => {
+          showAlert(err.message);
+        })
+        .finally(unblockSubmitButton);
+    }
+  });
+};
 
 uploadFile.addEventListener('change', showModal);
 cancelButton.addEventListener('click', hideModal);
-form.addEventListener('submit', onFormSubmit);
+
+export {onFormSubmit, showModal, hideModal};
