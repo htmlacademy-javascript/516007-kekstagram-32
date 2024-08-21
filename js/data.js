@@ -119,9 +119,9 @@ const createComment = () => ({
 const createPhotoElement = () => ({
   id: postId(),
   url: `photos/${photoId()}.jpg`,
-  description: getRandomArrayElement(DESCRIPTION),
   likes: getRandomNumberOfLikes(),
   comments: Array.from({length: getRandomNumberOfcomments()}, createComment),
+  description: getRandomArrayElement(DESCRIPTION),
 });
 
 const randomCard = () => Array.from({length: MAX_LENGTH_VALUE}, createPhotoElement);
